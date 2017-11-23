@@ -1,5 +1,8 @@
-//To Stepp Event! Simple horizontal/vertical speed with paralaxx math! you only need after you call the Feryx_starfield_Speed
-//use: Feryx_starfield_stepp();
+///Feryx_starfield_stepp()
+/*
+    Simple horizontal/vertical speed with parallax math. Only
+    needed after the Feryx_starfield_Speed has been called
+*/
 background_hspeed[6]=(sph);
 background_vspeed[6]=(spv);
 
