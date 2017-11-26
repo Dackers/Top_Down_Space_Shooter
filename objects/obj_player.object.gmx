@@ -28,10 +28,8 @@
             <string>/// Initialize Player
 
 /*STATS */
-
 //Name
 name                = "USS Freedom"
-
 //Engines
 impulse_speed       = 1;
 max_speed           = 5;
@@ -41,7 +39,6 @@ friction            = 0.06;
 spin_friction       = friction/2;
 flame_offsetX       = -30;
 flame_offsetY       = 1;
-
 //Weapons
 // -Phasers
 phaser_damage       = 2;
@@ -63,7 +60,6 @@ num_torpedos        = 1;
 torpedo_array[0,0]  = 30;
 torpedo_array[0,1]  = 0;
 torpedo_color       = make_colour_rgb(255, 0, 0)
-
 //Targetting
 t_first             = gp_padr;
 t_last              = gp_padl;
@@ -71,17 +67,14 @@ t_next              = gp_padu;
 t_previous          = gp_padd;
 target              = noone;
 range_circle        = true;
-
 //Shields
 instance_create(x,y,obj_shield);
 max_shields         = 10;
 shields             = max_shields;
 regen_rate          = 1/room_speed; //(1 per second)
-
-//HPs
+//Health
 max_hp              = 60000;
 hp                  = max_hp;
-
 //Misc
 sensor_radius       = 400;
 image_index         = 0;
@@ -93,13 +86,12 @@ image_yscale        = image_xscale;
 can_animate         = true;
 
 /* CONTROLS */
-
 //Keyboard
 right_key           = vk_right;
 left_key            = vk_left;
 forward_key         = vk_up;
 backward_key        = vk_down;
-
+reticule            = instance_create(mouse_x, mouse_y, obj_reticule);
 // Gamepad
 pad_num             = 0;
 h_move              = 0;
@@ -393,6 +385,11 @@ v_move  = gamepad_axis_value(pad_num, gp_axislv);
 h_point = gamepad_axis_value(pad_num, gp_axisrh);
 v_point = gamepad_axis_value(pad_num, gp_axisrv);
 
+/* Keyboard Input */
+if (mouse_check_button(mb_right)) {
+    image_angle = point_direction(x, y, mouse_x, mouse_y);
+}
+
 /* Banking motion */
 // ISSUES:
 //      (1) ship jitters when gp_axislh is anywhere other than -1, 0 or 1
@@ -495,6 +492,10 @@ if gamepad_button_check_pressed(pad_num, torpedo_button) and can_shoot_torpedo
 scr_TARGET_Step();
 
 range_circle ^= gamepad_button_check_pressed(pad_num, gp_face2);
+with (obj_reticule) {
+    x = mouse_x;
+    y = mouse_y;
+}
 </string>
           </argument>
         </arguments>

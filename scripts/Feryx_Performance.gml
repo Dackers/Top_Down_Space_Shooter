@@ -1,4 +1,5 @@
-///Feryx_Performance(
+///Feryx_Performance(x, y)
+
 //simple performance draw out!
 draw_text_colour(argument0,
                  argument1,

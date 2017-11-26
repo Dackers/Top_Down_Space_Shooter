@@ -49,6 +49,7 @@ var y_off = argument3;
 // NOTE! the PARENT for the targets should have a "name" variable that must have some text to display, although you can 
 // supply an empty string "" and have it simpy show nothing, or remove that part altogther and draw what you require!
 
+/*
 for (var i = 0; i < en; i++;)
     {
     enemy_id = ds_list_find_value(li, i);               // assign the list value to a variable...
@@ -78,7 +79,7 @@ for (var i = 0; i < en; i++;)
         draw_rectangle(view_xview[0] + x_off, view_yview[0] + y_off + (16 * i), view_xview[0] + x_off + 120, view_yview[0] + y_off + 16 + (16 * i), true);
         }
     }
-
+*/
 // This part will now draw a circle around the current target (if there is one) and then draw 
 // a line from the instance being used for drawing to the target.
 if ec != 0 && instance_exists(ec)

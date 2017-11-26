@@ -27,52 +27,66 @@
             <kind>1</kind>
             <string>///Display Properties
 
+// Reset display, and set aa and vsync
 display_reset(0, false);
 
-ideal_width = 0;
-ideal_height = 540;
-zoom = 1;
+// Instantiate variables
+zoom = 2;
 max_zoom = 1;
+
+// Get display resolution
 display_width = display_get_width();
 display_height = display_get_height();
 
+// Set aspect ratio
 aspect_ratio = display_width/display_height;
-aspect_ratio = clamp(aspect_ratio, 16/10, 21/9);    // Clamp to ratio between 1.6 and 2.33
-ideal_width = round(ideal_height*aspect_ratio);     // When using static HEIGHT and adjusting width (preferred option)
-//ideal_height=round(ideal_width / aspect_ratio);   // When using static WIDTH and adjusting width (not preferred option)
+aspect_ratio = clamp(aspect_ratio, 16/10, 21/9);  // Clamp to ratio between 1.6 and 2.33
 
-//Perfect Pixel Scaling
-if(display_width mod ideal_width != 0) {
-    var d = round(display_width/ideal_width);       // Divide display_width by ideal_width and round to nearest whole number multiplier
-    ideal_width = display_width/d;                  // then set ideal_width to that multiple
+// Set base resolution
+base_height = 540;
+base_width = round(base_height*aspect_ratio);     // When using static HEIGHT and adjusting width (preferred option)
+//base_height=round(base_width / aspect_ratio);   // When using static WIDTH and adjusting width (not preferred option)
+
+//Perfect pixel scaling
+if(display_width mod base_width != 0) {
+    var d = round(display_width/base_width);       // Divide display_width by base_width and round to nearest whole number multiplier
+    base_width = display_width/d;                  // then set base_width to that multiple
 }
-if(display_height mod ideal_height != 0) {          // Same with height
-    var d = round(display_height/ideal_height);
-    ideal_height = display_height/d;
+if(display_height mod base_height != 0) {          // Same with height
+    var d = round(display_height/base_height);
+    base_height = display_height/d;
 }
 
 //Check for odd numbers using bitwise operator
-if(ideal_width &amp; 1)     // If idea_width is odd returns 1, even returns 0
-    ideal_width++;      // if odd, add 1 to ideal_width
-if(ideal_height &amp; 1)    // Same for height
-    ideal_height++;
+if(base_width &amp; 1)                                 // If idea_width is odd returns 1, even returns 0
+    base_width++;                                  // if odd, add 1 to base_width
+if(base_height &amp; 1)                                // Same for height
+    base_height++;
     
-//Calculate Max Zoom
-max_zoom = floor(display_width/ideal_width);
+//Calculate max zoom
+max_zoom = floor(display_width/base_width);        // Make sure max zoom resolution is a whole number multiple of the display resolution
+
+// Set the window size
+window_set_size(base_width*zoom,base_height*zoom);// I added *zoom to make it start at zoom=2 (for bigger window). was just base_width, base_height
+
+// Set the Application Surface size
+surface_resize(application_surface,base_width*zoom,base_height*zoom);
+
+// Set the GUI Size to same resolution as Application Surface
+display_set_gui_size(-1,-1);
+
+// Recenter window after initial resizing
+alarm[0] = 1;
 
 // Setup view for every room
-for(var i=1; i&lt;=room_last; i++) {   // Skip room[0] because this code is running in it (room[0] = _display_init)
+for(var i=1; i&lt;=room_last; i++) {                   // Skip room[0] because this code is running in it (room[0] = _display_init)
     if(room_exists(i)) {
-        room_set_view(i,0,true,0,0,ideal_width,ideal_height,0,0,ideal_width,ideal_height,0,0,0,0,-1);   // This function is in the online help, but middle-click doesn't work
+        room_set_view(i,0,true,0,0,base_width,base_height,0,0,base_width,base_height,0,0,0,0,-1);   // This function is in the online help, but middle-click doesn't work
         room_set_view_enabled(i,true);
     }
 }
 
-window_set_size(ideal_width,ideal_height);
-display_set_gui_size(ideal_width,ideal_height); // Set higher if we lower ideal_width/height
-surface_resize(application_surface,ideal_width*zoom,ideal_height*zoom);
-
-alarm[0] = 1; // This will center the window after the initial resizing.
+// Got to next room
 room_goto(room_next(room));
 </string>
           </argument>
@@ -97,7 +111,7 @@ room_goto(room_next(room));
           <argument>
             <kind>1</kind>
             <string>///Delayed Surface resize
-surface_resize(application_surface,ideal_width*zoom,ideal_height*zoom);
+surface_resize(application_surface,base_width*zoom,base_height*zoom);
 </string>
           </argument>
         </arguments>
@@ -147,14 +161,16 @@ window_center();
           <argument>
             <kind>1</kind>
             <string>///Zoom window
-if(keyboard_check_pressed(ord("Z"))) {
-    zoom++;
-    if(zoom &gt; max_zoom) {
-        zoom = 1;
-    }
-    window_set_size(ideal_width*zoom,ideal_height*zoom);
-    surface_resize(application_surface,ideal_width*zoom,ideal_height*zoom); // Performance hit: consider using half the ratio to window size
-    alarm[0] = 1;
+if(keyboard_check_pressed(ord("Z")))
+{
+  zoom++;
+  
+  if(zoom &gt; max_zoom)
+    zoom = 1;
+  
+  window_set_size(base_width*zoom,base_height*zoom);
+  surface_resize(application_surface,base_width*zoom,base_height*zoom); // Performance hit: consider using half the ratio to window size
+  alarm[0] = 1;
 }
 </string>
           </argument>

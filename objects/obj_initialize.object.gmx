@@ -81,7 +81,7 @@ if (instance_number(obj_enemy_klingon) &lt;= global.list_size)
 {
     var xx = choose(view_xview-64, view_xview+view_wview+64);
     var yy = choose(view_yview-64, view_yview+view_hview+64);
-    instance_create(xx, yy, obj_enemy_klingon);
+    //instance_create(xx, yy, obj_enemy_klingon);
 }
 </string>
           </argument>
@@ -131,7 +131,7 @@ frame_delta = desired_fps / 1000000 * delta_time;
             <kind>1</kind>
             <string>///Minimap
 
-scr_minimap(0, view_hview[0]-200, 4);
+//scr_minimap(0, view_hview[0]-200, 4);
 </string>
           </argument>
         </arguments>

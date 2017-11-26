@@ -45,6 +45,8 @@
     <sprite>sprites\spr_bullet_2</sprite>
     <sprite>sprites\spr_muzzle_fx_red</sprite>
     <sprite>sprites\spr_shield</sprite>
+    <sprite>sprites\spr_reticule</sprite>
+    <sprite>sprites\spr_menu_res_buttons</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -110,6 +112,7 @@
       <object>objects\obj_torpedo</object>
       <object>objects\obj_thrustflame</object>
       <object>objects\obj_shield</object>
+      <object>objects\obj_reticule</object>
     </objects>
     <objects name="Entities">
       <object>objects\obj_TARGET_Parent</object>
